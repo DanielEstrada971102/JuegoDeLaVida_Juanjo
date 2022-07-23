@@ -2,6 +2,9 @@ import pygame
 import numpy as np
 import time
 
+import os
+os.environ['SDL_AUDIODRIVER'] = 'dsp'
+
 pygame.init()
 
 width, height = 600, 600
@@ -15,31 +18,26 @@ nxC, nyC = 50, 50
 dimCW = width / nxC
 dimCH = height / nyC
 
-gameState = np.zeros((nxC, nyC))
-
-gameState[5, 3] = 1
-gameState[8, 4] = 1
-gameState[5, 7] = 1
+gameState = np.random.choice([0,1],(nxC, nyC))
 
 
 while True:
-
     newGameState = np.copy(gameState)
 
     screen.fill(bg)
-    time.sleep(0.1)
+    time.sleep(.1)
 
     for y in range(0, nxC):
         for x in range(0, nyC):
 
             n_neigh = gameState[(x-1) %nxC, (y-1) % nyC] + \
-                      gameState[(x-1) %nxC, (y-1) % nyC] + \
-                      gameState[(x-1) %nxC, (y-1) % nyC] + \
-                      gameState[(x-1) %nxC, (y-1) % nyC] + \
-                      gameState[(x-1) %nxC, (y-1) % nyC] + \
-                      gameState[(x-1) %nxC, (y-1) % nyC] + \
-                      gameState[(x-1) %nxC, (y-1) % nyC] + \
-                      gameState[(x-1) %nxC, (y-1) % nyC] 
+                      gameState[(x) %nxC, (y-1) % nyC] + \
+                      gameState[(x+1) %nxC, (y-1) % nyC] + \
+                      gameState[(x-1) %nxC, (y) % nyC] + \
+                      gameState[(x+1) %nxC, (y) % nyC] + \
+                      gameState[(x-1) %nxC, (y+1) % nyC] + \
+                      gameState[(x) %nxC, (y+1) % nyC] + \
+                      gameState[(x+1) %nxC, (y+1) % nyC] 
 
             if gameState[x, y] == 0 and n_neigh == 3:
                 newGameState[x, y] = 1
